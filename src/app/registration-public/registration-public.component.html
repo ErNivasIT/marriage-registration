@@ -1,1 +1,7 @@
 <p>registration-public works!</p>
+<select>
+    <option *ngFor="let gender of genders" [value]="gender.id">{{ gender.gender }}</option>
+</select>
+<select>
+    <option *ngFor="let category of categories" [value]="category.id">{{ category.category }}</option>
+</select>
