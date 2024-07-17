@@ -1,7 +1,46 @@
-<p>registration-public works!</p>
-<select>
-    <option *ngFor="let gender of genders" [value]="gender.id">{{ gender.gender }}</option>
-</select>
-<select>
-    <option *ngFor="let category of categories" [value]="category.id">{{ category.category }}</option>
-</select>
+<div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" class="form-control" formControlName="firstName">
+          </div>
+  
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" class="form-control" formControlName="lastName">
+          </div>
+  
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" class="form-control" formControlName="email">
+          </div>
+          <div class="form-group">
+            <label>DOB</label>
+            <input type="dob" class="form-control" formControlName="dob">
+          </div>
+          <div class="form-group">
+            <label>Mobile No</label>
+            <input type="mobileNo" class="form-control" formControlName="mobileNo">
+          </div>
+          <div class="form-group">
+            <label>Gender</label>
+            <select class="form-control" formControlName="gender">
+              <option *ngFor="let gender of genders" [value]="gender.id">{{ gender.gender }}</option>
+            </select>
+          </div>
+  
+          <div class="form-group">
+            <label>Category</label>
+            <select class="form-control" formControlName="category">
+              <option *ngFor="let category of categories" [value]="category.id">{{ category.category }}</option>
+            </select>
+          </div>
+  
+          <button type="submit" class="btn btn-primary" [disabled]="!registrationForm.valid">Register</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  

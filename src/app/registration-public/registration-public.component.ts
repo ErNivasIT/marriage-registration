@@ -3,18 +3,32 @@ import { MasterServicesService } from '../services/master-services.service';
 import { Gender } from '../models/gender';
 import { NgFor } from '@angular/common';
 import { Category } from '../models/category';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RegistrationService } from '../services/registration-service';
 
 @Component({
   selector: 'app-registration-public',
   standalone: true,
-  imports: [NgFor],
+  imports: [NgFor,ReactiveFormsModule],
   templateUrl: './registration-public.component.html',
   styleUrl: './registration-public.component.css'
 })
 export class RegistrationPublicComponent {
+  registrationForm: FormGroup;
   genders: Gender[] = [];
   categories: Category[] = [];
-  constructor(private masterService: MasterServicesService) { }
+  constructor(private masterService: MasterServicesService,private registrationService:RegistrationService,private fb: FormBuilder) {
+    this.registrationForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      mobileNo: ['', [Validators.required]],
+      dob: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      gender: ['', Validators.required],
+      category: ['', Validators.required]
+    });
+
+   }
   ngOnInit(): void {
     this.masterService.getGenders().subscribe(
       data => this.genders = data,
@@ -26,5 +40,13 @@ export class RegistrationPublicComponent {
       error => console.error('Error fetching genders', error)
     );
 
+  }
+  onSubmit() {
+    if (this.registrationForm.valid) {
+      console.log(this.registrationForm.value);
+      this.registrationService.registerProfile(this.registrationForm.value).subscribe(p=>{
+        console.log(p)
+      }) ;
+    }
   }
 }
