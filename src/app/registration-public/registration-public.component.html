@@ -43,4 +43,11 @@
       </div>
     </div>
   </div>
+  <div *ngIf="responseData">
+    <p><strong>ID:</strong> {{ responseData.id }}</p>
+    <p><strong>Response Code:</strong> {{ responseData.responseCode }}</p>
+    <p><strong>Is Success:</strong> {{ responseData.isSuccess }}</p>
+    <p><strong>Response:</strong> {{ responseData.response }}</p>
+  </div>
+  
   

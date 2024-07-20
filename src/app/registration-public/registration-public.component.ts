@@ -1,19 +1,21 @@
 import { Component } from '@angular/core';
 import { MasterServicesService } from '../services/master-services.service';
 import { Gender } from '../models/gender';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { Category } from '../models/category';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RegistrationService } from '../services/registration-service';
+import { error } from 'node:console';
 
 @Component({
   selector: 'app-registration-public',
   standalone: true,
-  imports: [NgFor,ReactiveFormsModule],
+  imports: [NgFor,NgIf,ReactiveFormsModule],
   templateUrl: './registration-public.component.html',
   styleUrl: './registration-public.component.css'
 })
 export class RegistrationPublicComponent {
+  responseData:any;
   registrationForm: FormGroup;
   genders: Gender[] = [];
   categories: Category[] = [];
@@ -45,8 +47,9 @@ export class RegistrationPublicComponent {
     if (this.registrationForm.valid) {
       console.log(this.registrationForm.value);
       this.registrationService.registerProfile(this.registrationForm.value).subscribe(p=>{
+        this.responseData=p;
         console.log(p)
-      }) ;
+      },error=>{console.log(error);}) ;
     }
   }
 }
