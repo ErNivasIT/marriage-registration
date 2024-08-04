@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-login-now',
   standalone: true,
@@ -18,16 +17,17 @@ export class LoginNowComponent {
   private currentUserSubject!: BehaviorSubject<any>;
   public currentUser!: Observable<any>;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private router: Router) {
     this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser')!));
     this.currentUser = this.currentUserSubject.asObservable();
   }
-
+  ngOnInit(): void {
+  }
   onSubmit(loginForm: any) {
     console.log(loginForm.value);
     this.authService.login(this.username, this.password)
       .subscribe(p => {
-        console.log(p);
+        this.router.navigate(['/registration']);
       });
   }
 
