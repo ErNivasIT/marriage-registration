@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { MasterServicesService } from '../services/master-services.service';
 import { Gender } from '../models/gender';
-import { NgFor, NgIf } from '@angular/common';
+import { JsonPipe, NgFor, NgIf } from '@angular/common';
 import { Category } from '../models/category';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RegistrationService } from '../services/registration-service';
 import { error } from 'node:console';
 
 @Component({
   selector: 'app-registration-public',
   standalone: true,
-  imports: [NgFor,NgIf,ReactiveFormsModule],
+  imports: [NgFor,NgIf,ReactiveFormsModule,JsonPipe],
   templateUrl: './registration-public.component.html',
   styleUrl: './registration-public.component.css'
 })
@@ -23,8 +23,8 @@ export class RegistrationPublicComponent {
     this.registrationForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      mobileNo: ['', [Validators.required]],
-      dob: ['', [Validators.required]],
+      mobileNo: ['', [Validators.required,Validators.minLength(10),Validators.maxLength(10)]],
+      dob: ['', [Validators.required,this.dobValidator]],
       email: ['', [Validators.required, Validators.email]],
       gender: ['', Validators.required],
       category: ['', Validators.required]
@@ -42,6 +42,10 @@ export class RegistrationPublicComponent {
       error => console.error('Error fetching genders', error)
     );
 
+  }
+  dobValidator(control: AbstractControl): { [key: string]: any } | null {
+    const isValid = /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[012])\/(19|20)\d\d$/.test(control.value);
+    return isValid ? null : { invalidDate: true };
   }
   onSubmit() {
     if (this.registrationForm.valid) {

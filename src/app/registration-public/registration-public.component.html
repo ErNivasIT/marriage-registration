@@ -1,53 +1,96 @@
 <div class="container">
-    <div class="row">
-      <div class="col-md-6 offset-md-3">
-        <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-          <div class="form-group">
-            <label>First Name</label>
-            <input type="text" class="form-control" formControlName="firstName">
-          </div>
-  
-          <div class="form-group">
-            <label>Last Name</label>
-            <input type="text" class="form-control" formControlName="lastName">
-          </div>
-  
-          <div class="form-group">
-            <label>Email</label>
-            <input type="email" class="form-control" formControlName="email">
-          </div>
-          <div class="form-group">
-            <label>DOB</label>
-            <input type="dob" class="form-control" formControlName="dob">
-          </div>
-          <div class="form-group">
-            <label>Mobile No</label>
-            <input type="mobileNo" class="form-control" formControlName="mobileNo">
-          </div>
-          <div class="form-group">
-            <label>Gender</label>
-            <select class="form-control" formControlName="gender">
-              <option *ngFor="let gender of genders" [value]="gender.id">{{ gender.gender }}</option>
-            </select>
-          </div>
-  
-          <div class="form-group">
-            <label>Category</label>
-            <select class="form-control" formControlName="category">
-              <option *ngFor="let category of categories" [value]="category.id">{{ category.category }}</option>
-            </select>
-          </div>
-  
-          <button type="submit" class="btn btn-primary" [disabled]="!registrationForm.valid">Register</button>
-        </form>
-      </div>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" class="form-control" formControlName="firstName">
+          @if((registrationForm.controls['firstName'].touched || registrationForm.controls['firstName'].dirty) &&
+          registrationForm.controls['firstName'].errors?.['required'])
+          {
+          <span class="text text-danger">Please enter first Name</span>
+          }
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" class="form-control" formControlName="lastName">
+          @if((registrationForm.controls['lastName'].touched || registrationForm.controls['lastName'].dirty) &&
+          registrationForm.controls['lastName'].errors?.['required'])
+          {
+          <span class="text text-danger">Please enter last Name</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" class="form-control" formControlName="email">
+
+          @if((registrationForm.controls['email'].touched || registrationForm.controls['email'].dirty) &&
+          registrationForm.controls['email'].errors?.['required'])
+          {
+          <span class="text text-danger">Please enter email</span>
+          }
+          @else if(registrationForm.controls['email'].errors?.['email'])
+          {
+          <span class="text text-danger">Enter valid Email</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>DOB</label>
+          <input type="dob" class="form-control" formControlName="dob">
+
+          @if((registrationForm.controls['dob'].touched || registrationForm.controls['dob'].dirty) &&
+          registrationForm.controls['dob'].errors?.['required'])
+          {
+          <span class="text text-danger">Please enter DOB</span>
+          }
+          @else if((registrationForm.controls['dob'].touched || registrationForm.controls['dob'].dirty) &&
+          registrationForm.controls['dob'].errors?.['invalidDate'])
+          {
+          <span class="text text-danger">Invalid date format. Please enter DOB in dd/MM/yyyy format</span>
+          }
+        </div>
+        <div class="form-group">
+          <label>Mobile No</label>
+          <input type="mobileNo" class="form-control" formControlName="mobileNo">
+
+          @if((registrationForm.controls['mobileNo'].touched || registrationForm.controls['mobileNo'].dirty) &&
+          registrationForm.controls['mobileNo'].errors?.['required'])
+          {
+          <span class="text text-danger">Please enter Mobile No</span>
+          }
+          @if((registrationForm.controls['mobileNo'].touched || registrationForm.controls['mobileNo'].dirty) &&
+          registrationForm.controls['mobileNo'].errors?.['minlength'])
+          {
+          <span class="text text-danger">Please enter 10 digit Mobile No</span>
+          }
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <select class="form-control" formControlName="gender">
+            <option *ngFor="let gender of genders" [value]="gender.id">{{ gender.gender }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Category</label>
+          <select class="form-control" formControlName="category">
+            <option *ngFor="let category of categories" [value]="category.id">{{ category.category }}</option>
+          </select>
+        </div>
+        <div class="mt-2">
+          <button type="submit" class="btn btn-outline-primary" [disabled]="!registrationForm.valid">Register</button>
+        </div>
+      </form>
     </div>
   </div>
-  <div *ngIf="responseData">
-    <p><strong>ID:</strong> {{ responseData.id }}</p>
-    <p><strong>Response Code:</strong> {{ responseData.responseCode }}</p>
-    <p><strong>Is Success:</strong> {{ responseData.isSuccess }}</p>
-    <p><strong>Response:</strong> {{ responseData.response }}</p>
-  </div>
-  
-  
+</div>
+<div *ngIf="responseData">
+  <p><strong>ID:</strong> {{ responseData.id }}</p>
+  <p><strong>Response Code:</strong> {{ responseData.responseCode }}</p>
+  <p><strong>Is Success:</strong> {{ responseData.isSuccess }}</p>
+  <p><strong>Response:</strong> {{ responseData.response }}</p>
+</div>
+<div>{{registrationForm.value | json}}</div>
+<div>{{registrationForm.valid}}</div>
